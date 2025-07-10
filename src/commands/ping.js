@@ -1,4 +1,4 @@
-// src/commands/ping.js
+src/commands/ping.js
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
