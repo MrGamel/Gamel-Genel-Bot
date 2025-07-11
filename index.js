@@ -1,46 +1,60 @@
 // index.js
 import { Client, Collection, GatewayIntentBits } from 'discord.js';
-import fs from 'fs';
 import dotenv from 'dotenv';
+import fs from 'fs';
 import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
+import { getUserLang } from './utils/langStorage.js';
+
 dotenv.config();
 
-// i18n ayarları
+// i18next dil ayarları
 await i18next
   .use(Backend)
   .init({
-    lng: 'tr', // default
+    lng: 'en', // Varsayılan başlangıç dili
     fallbackLng: 'en',
-    backend: { loadPath: './locales/{{lng}}/translation.json' }
+    backend: {
+      loadPath: './locales/{{lng}}/translation.json'
+    }
   });
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+  intents: [GatewayIntentBits.Guilds]
+});
+
 client.commands = new Collection();
 
 // Komutları yükle
-const commandFiles = fs.readdirSync('./commands').filter(f => f.endsWith('.js'));
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+
 for (const file of commandFiles) {
   const { data, execute } = await import(`./commands/${file}`);
   client.commands.set(data.name, { data, execute });
 }
 
-client.on('ready', () => {
-  console.log(`${client.user.tag} sunucuya giriş yaptı.`);
+client.once('ready', () => {
+  console.log(`${client.user.tag} çalışıyor!`);
 });
 
 client.on('interactionCreate', async interaction => {
   if (!interaction.isCommand()) return;
-  const cmd = client.commands.get(interaction.commandName);
-  if (!cmd) return;
-  // Kullanıcının seçtiği dil
-  const lang = interaction.locale || 'en';
-  await i18next.changeLanguage(lang);
+
+  // Kullanıcının dili
+  const userLang = getUserLang(interaction.user.id) || 'en';
+  await i18next.changeLanguage(userLang);
+
+  const command = client.commands.get(interaction.commandName);
+  if (!command) return;
+
   try {
-    await cmd.execute(interaction, i18next);
-  } catch (err) {
-    console.error(err);
-    await interaction.reply({ content: i18next.t('error'), ephemeral: true });
+    await command.execute(interaction, i18next);
+  } catch (error) {
+    console.error(error);
+    await interaction.reply({
+      content: i18next.t('error'),
+      ephemeral: true
+    });
   }
 });
 
