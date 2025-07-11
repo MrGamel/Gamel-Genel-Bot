@@ -1,7 +1,5 @@
 {
-  "type": "module",
-  "name": "gamel-genel-bot",
+  "name": "multi-lang-bot",
   "version": "1.0.0",
-  "main": "index.js",
-  ...
+  "type": "module"
 }
