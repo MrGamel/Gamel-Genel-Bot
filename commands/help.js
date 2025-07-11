@@ -3,15 +3,13 @@ import { SlashCommandBuilder } from 'discord.js';
 
 export const data = new SlashCommandBuilder()
   .setName('help')
-  .setDescription('Mevcut komutların listesini gösterir');
+  .setDescription('Lists all available commands');
 
 export async function execute(interaction, i18next) {
-  const commands = [
-    '`/ping` – ' + i18next.t('desc_ping'),
-    '`/help` – ' + i18next.t('desc_help'),
-    '`/language` – ' + i18next.t('desc_language')
-  ];
+  const list = Array.from(interaction.client.commands.values())
+    .map(cmd => `\`/${cmd.data.name}\` – ${i18next.t(`desc_${cmd.data.name}`)}`)
+    .join('\n');
 
-  const reply = i18next.t('help_header') + '\n' + commands.join('\n');
-  await interaction.reply({ content: reply, ephemeral: true });
+  const header = i18next.t('help_header');
+  await interaction.reply({ content: `${header}\n${list}`, ephemeral: true });
 }
