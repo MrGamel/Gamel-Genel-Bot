@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const commands = [];
-const commandFiles = fs.readdirSync('./commands').filter(f => f.endsWith('.js'));
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
   const { data } = await import(`./commands/${file}`);
   commands.push(data.toJSON());
@@ -17,4 +17,5 @@ await rest.put(
   Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
   { body: commands }
 );
+
 console.log('Slash komutları kaydedildi.');
