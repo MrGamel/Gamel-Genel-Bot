@@ -1,29 +1,18 @@
 // utils/langStorage.js
 import fs from 'fs';
+const FILE = './userLangs.json';
 
-const LANG_FILE = './userLangs.json';
-
-export function getUserLang(userId) {
-  try {
-    const data = fs.readFileSync(LANG_FILE, 'utf-8');
-    const langs = JSON.parse(data);
-    return langs[userId];
-  } catch (error) {
-    console.error('Dil verisi okunamadı:', error);
-    return null;
-  }
+export function getUserLang(id) {
+  if (!fs.existsSync(FILE)) return null;
+  const data = JSON.parse(fs.readFileSync(FILE, 'utf8'));
+  return data[id];
 }
 
-export function setUserLang(userId, lang) {
-  try {
-    let langs = {};
-    if (fs.existsSync(LANG_FILE)) {
-      const data = fs.readFileSync(LANG_FILE, 'utf-8');
-      langs = JSON.parse(data);
-    }
-    langs[userId] = lang;
-    fs.writeFileSync(LANG_FILE, JSON.stringify(langs, null, 2));
-  } catch (error) {
-    console.error('Dil verisi kaydedilemedi:', error);
+export function setUserLang(id, lang) {
+  let data = {};
+  if (fs.existsSync(FILE)) {
+    data = JSON.parse(fs.readFileSync(FILE, 'utf8'));
   }
+  data[id] = lang;
+  fs.writeFileSync(FILE, JSON.stringify(data, null, 2));
 }
