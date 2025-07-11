@@ -1,0 +1,10 @@
+{
+  "pinging": "Gecikme ölçülüyor...",
+  "pong": "Pong! Gecikme: {{ms}}ms",
+  "desc_ping": "Botun gecikmesini ölçer",
+  "desc_help": "Kullanılabilir komutları listeler",
+  "desc_language": "Dil ayarını değiştirir",
+  "help_header": "İşte mevcut komutlar:",
+  "lang_changed": "Dil ayarın güncellendi!",
+  "error": "Bir şeyler ters gitti. Lütfen tekrar dene."
+}
