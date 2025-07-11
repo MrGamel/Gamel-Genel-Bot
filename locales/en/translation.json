@@ -1,0 +1,10 @@
+{
+  "pinging": "Pinging...",
+  "pong": "Pong! Latency: {{ms}}ms",
+  "desc_ping": "Measures the bot's latency",
+  "desc_help": "Lists all available commands",
+  "desc_language": "Changes your language setting",
+  "help_header": "Here are the available commands:",
+  "lang_changed": "Your language has been updated!",
+  "error": "Something went wrong. Please try again."
+}
