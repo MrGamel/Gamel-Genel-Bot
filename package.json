@@ -1,5 +1,14 @@
 {
-  "name": "multi-lang-bot",
+  "name": "gamel-genel-bot",
   "version": "1.0.0",
-  "type": "module"
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "deploy-commands": "node deploy-commands.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.0.0",
+    "i18next": "^22.0.0",
+    "sqlite3": "^5.1.6"            // veya "pg" + "sequelize" PostgreSQL için
+  }
 }
