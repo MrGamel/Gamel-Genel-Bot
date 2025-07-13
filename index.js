@@ -1,48 +1,33 @@
-// index.js
-import { Client, Collection, GatewayIntentBits } from 'discord.js';
-import dotenv from 'dotenv';
-import fs from 'fs';
-import i18next from 'i18next';
-import Backend from 'i18next-fs-backend';
-import { getUserLang } from './utils/langStorage.js';
+require('dotenv').config();
+const fs = require('fs');
+const path = require('path');
+const { Client, GatewayIntentBits, Collection } = require('discord.js');
+const i18next = require('i18next');
+const Backend = require('i18next-fs-backend');
 
-dotenv.config();
-
-await i18next
-  .use(Backend)
-  .init({
-    lng: 'en',
-    fallbackLng: 'en',
-    backend: { loadPath: './locales/{{lng}}/translation.json' }
-  });
+i18next.use(Backend).init({
+  lng: 'en',
+  fallbackLng: 'en',
+  backend: { loadPath: './locales/{{lng}}.json' }
+});
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 client.commands = new Collection();
 
-for (const file of fs.readdirSync('./commands').filter(f => f.endsWith('.js'))) {
-  const { data, execute } = await import(`./commands/${file}`);
-  client.commands.set(data.name, { data, execute });
+// Komut dosyalarını yükle
+const commandsPath = path.join(__dirname, 'commands');
+for (const file of fs.readdirSync(commandsPath)) {
+  if (file.endsWith('.js')) {
+    const command = require(path.join(commandsPath, file));
+    client.commands.set(command.data.name, command);
+  }
 }
 
-client.once('ready', () => {
-  console.log(`${client.user.tag} is online!`);
-});
-
 client.on('interactionCreate', async interaction => {
-  if (!interaction.isCommand()) return;
-
-  const userLang = getUserLang(interaction.user.id) || 'en';
-  await i18next.changeLanguage(userLang);
-
-  const command = client.commands.get(interaction.commandName);
-  if (!command) return;
-
-  try {
-    await command.execute(interaction, i18next);
-  } catch (err) {
-    console.error(err);
-    await interaction.reply({ content: i18next.t('error'), ephemeral: true });
-  }
+  if (!interaction.isChatInputCommand()) return;
+  const cmd = client.commands.get(interaction.commandName);
+  if (!cmd) return;
+  await cmd.execute(interaction, i18next);
 });
 
 client.login(process.env.DISCORD_TOKEN);
