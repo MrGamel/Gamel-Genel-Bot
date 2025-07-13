@@ -9,6 +9,6 @@
   "dependencies": {
     "discord.js": "^14.0.0",
     "i18next": "^22.0.0",
-    "sqlite3": "^5.1.6"            // veya "pg" + "sequelize" PostgreSQL için
+    "sqlite3": "^5.1.6"            
   }
 }
