@@ -8,11 +8,9 @@
   },
   "dependencies": {
     "discord.js": "^14.0.0",
+    "sqlite3": "^5.1.6",
+    "dotenv": "^16.0.0",
     "i18next": "^22.0.0",
-    "sqlite3": "^5.1.6"            
+    "i18next-fs-backend": "^1.0.0"
   }
-}
-"scripts": {
-  "start": "node index.js",
-  "deploy-commands": "node deploy-commands.js"
 }
