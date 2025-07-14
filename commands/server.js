@@ -5,6 +5,8 @@ module.exports = {
     .setName('server')
     .setDescription('Sunucu bilgilerini gösterir'),
   async execute(interaction) {
-    await interaction.reply(`Sunucu adı: ${interaction.guild.name}\nÜye sayısı: ${interaction.guild.memberCount}`);
+    await interaction.reply(
+      `Sunucu: ${interaction.guild.name}\nÜye sayısı: ${interaction.guild.memberCount}`
+    );
   }
 };
