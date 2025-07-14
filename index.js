@@ -14,12 +14,10 @@ i18next.use(Backend).init({
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 client.commands = new Collection();
 
-// Komut dosyalarını yükle
-const commandsPath = path.join(__dirname, 'commands');
-for (const file of fs.readdirSync(commandsPath)) {
+for (const file of fs.readdirSync('./commands')) {
   if (file.endsWith('.js')) {
-    const command = require(path.join(commandsPath, file));
-    client.commands.set(command.data.name, command);
+    const cmd = require(`./commands/${file}`);
+    client.commands.set(cmd.data.name, cmd);
   }
 }
 
